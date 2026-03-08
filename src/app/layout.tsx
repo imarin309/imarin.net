@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants/meta";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Tech Blog",
-  description: "技術的な挑戦、学び、気づきをアウトプットしています",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
         <footer className="border-t border-zinc-200 mt-16">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <p className="text-center text-zinc-500 text-sm">
-              © 2026 Tech Blog. All rights reserved.
+              © 2026 {SITE_TITLE}. All rights reserved.
             </p>
           </div>
         </footer>

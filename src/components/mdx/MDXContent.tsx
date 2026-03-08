@@ -9,7 +9,6 @@ interface MDXContentProps {
 }
 
 function getMDXComponent(code: string) {
-  // eslint-disable-next-line @typescript-eslint/no-implied-eval
   const fn = new Function(code);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return fn({ ...runtime }).default as React.ComponentType<any>;
