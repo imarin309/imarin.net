@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { posts } from "#site/content";
 import { MDXContent } from "@/components/mdx/MDXContent";
+import { SITE_TITLE } from "@/constants/meta";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: Props) {
   const { id } = await params;
   const post = posts.find((p) => p.slug === id);
   if (!post) return {};
-  return { title: `${post.title} | Tech Blog` };
+  return { title: `${post.title} | ${SITE_TITLE}` };
 }
 
 export default async function PostPage({ params }: Props) {

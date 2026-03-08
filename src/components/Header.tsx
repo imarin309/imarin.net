@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Code2 } from "lucide-react";
+import { SITE_TITLE, SITE_CATCHCOPY } from "@/constants/meta";
 
 export function Header() {
   return (
@@ -11,7 +12,12 @@ export function Header() {
             className="flex items-center gap-2 hover:opacity-70 transition-opacity"
           >
             <Code2 className="w-6 h-6 text-zinc-900" />
-            <span className="text-xl font-medium text-zinc-900">Tech Blog</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-medium text-zinc-900 leading-tight">
+                {SITE_TITLE}
+              </span>
+              <span className="text-xs text-zinc-500">{SITE_CATCHCOPY}</span>
+            </div>
           </Link>
           <nav>
             <Link
