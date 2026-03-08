@@ -1,0 +1,41 @@
+{
+  "name": "engineer-blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "velite --watch & next dev",
+    "build": "velite && next build",
+    "start": "next start",
+    "lint": "prettier --check . && eslint && markdownlint-cli2 \"content/**/*.mdx\"",
+    "format": "prettier --write . && eslint --fix && markdownlint-cli2 --fix \"content/**/*.mdx\"",
+    "velite": "velite"
+  },
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.487.0",
+    "react-syntax-highlighter": "^16.1.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0",
+    "velite": "^0.3.1",
+    "remark-breaks": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "typescript": "^5",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
+    "postcss": "^8",
+    "eslint": "^9",
+    "eslint-config-next": "^15",
+    "eslint-config-prettier": "^10",
+    "eslint-plugin-mdx": "^3",
+    "markdownlint-cli2": "^0.21.0",
+    "prettier": "^3"
+  }
+}
