@@ -24,7 +24,13 @@ const eslintConfig = defineConfig([
   mdxFlat,
   mdxFlatCodeBlocks,
   prettier,
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+    "content/drafts/**",
+  ]),
 ]);
 
 export default eslintConfig;

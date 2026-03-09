@@ -10,7 +10,6 @@ const posts = defineCollection({
       description: s.string().max(300).optional(),
       date: s.isodate(),
       category: s.string(),
-      readTime: s.string(),
       slug: s.path(),
       content: s.mdx(),
     })

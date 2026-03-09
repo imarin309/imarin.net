@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { posts } from "#site/content";
 import { MDXContent } from "@/components/mdx/MDXContent";
 import { SITE_TITLE } from "@/constants/meta";
@@ -57,10 +57,6 @@ export default async function PostPage({ params }: Props) {
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <span>{formattedDate}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>{post.readTime}</span>
           </div>
         </div>
       </header>
