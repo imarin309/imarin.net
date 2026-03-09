@@ -22,7 +22,7 @@ npm run velite   # Velite 単体実行
 
 MDX のフロントマター必須フィールド：
 
-- `title` / `date`（ISO形式）/ `category` / `readTime`（例: `"8分"`）
+- `title` / `date`（ISO形式）/ `category`
 
 `slug` はファイルパスから自動生成される（`posts/` プレフィックスは除去）。
 

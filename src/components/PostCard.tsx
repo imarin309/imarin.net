@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, Clock } from "lucide-react";
+import { Calendar } from "lucide-react";
 import type { Post } from "#site/content";
 
 interface PostCardProps {
@@ -34,10 +34,6 @@ export function PostCard({ post }: PostCardProps) {
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <span>{formattedDate}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>{post.readTime}</span>
           </div>
         </div>
       </article>
