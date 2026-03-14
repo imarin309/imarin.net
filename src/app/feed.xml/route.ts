@@ -1,7 +1,5 @@
 import { posts } from "#site/content";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants/meta";
-
-const SITE_URL = "https://imarin.net";
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "@/constants/meta";
 
 export async function GET() {
   const sortedPosts = [...posts].sort(
@@ -37,7 +35,7 @@ ${items}
 
   return new Response(rss, {
     headers: {
-      "Content-Type": "application/xml; charset=utf-8",
+      "Content-Type": "application/rss+xml; charset=utf-8",
     },
   });
 }

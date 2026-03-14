@@ -1,3 +1,4 @@
+export const SITE_URL = "https://imarin.net";
 export const SITE_TITLE = "ぽよりろぐ";
 export const SITE_CATCHCOPY =
   "エンジニアとしてキャッチアップしたことを書いていく";
