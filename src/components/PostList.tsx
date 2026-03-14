@@ -54,8 +54,12 @@ export function PostList({ posts, categories }: PostListProps) {
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-10">
+        <nav
+          aria-label="ページネーション"
+          className="flex justify-center items-center gap-2 mt-10"
+        >
           <button
+            type="button"
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
             className="px-3 py-1.5 rounded text-sm bg-zinc-100 text-zinc-700 hover:bg-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
@@ -66,7 +70,9 @@ export function PostList({ posts, categories }: PostListProps) {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
+              type="button"
               onClick={() => setCurrentPage(page)}
+              aria-current={page === currentPage ? "page" : undefined}
               className={cn(
                 "px-3 py-1.5 rounded text-sm transition-all",
                 page === currentPage
@@ -79,13 +85,14 @@ export function PostList({ posts, categories }: PostListProps) {
           ))}
 
           <button
+            type="button"
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
             className="px-3 py-1.5 rounded text-sm bg-zinc-100 text-zinc-700 hover:bg-zinc-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             次へ
           </button>
-        </div>
+        </nav>
       )}
     </>
   );
