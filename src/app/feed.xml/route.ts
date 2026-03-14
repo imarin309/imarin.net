@@ -1,7 +1,7 @@
 import { posts } from "#site/content";
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "@/constants/meta";
 
-export async function GET() {
+export function GET() {
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
