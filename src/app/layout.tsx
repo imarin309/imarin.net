@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/constants/meta";
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "@/constants/meta";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+    },
+  },
 };
 
 export default function RootLayout({
