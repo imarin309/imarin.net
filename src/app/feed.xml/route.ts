@@ -1,6 +1,10 @@
 import { posts } from "#site/content";
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "@/constants/meta";
 
+export const dynamic = "force-static";
+
+const escapeCDATA = (str: string) => str.replace(/]]>/g, "]]]]><![CDATA[>");
+
 export function GET() {
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
@@ -12,11 +16,11 @@ export function GET() {
       const pubDate = new Date(post.date).toUTCString();
       return `
     <item>
-      <title><![CDATA[${post.title}]]></title>
+      <title><![CDATA[${escapeCDATA(post.title)}]]></title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
       <pubDate>${pubDate}</pubDate>
-      <category><![CDATA[${post.category}]]></category>
+      <category><![CDATA[${escapeCDATA(post.category)}]]></category>
     </item>`;
     })
     .join("");
