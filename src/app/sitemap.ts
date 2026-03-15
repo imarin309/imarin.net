@@ -12,7 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const pageEntries: MetadataRoute.Sitemap = pages.map((page) => ({
     url: `${SITE_URL}/${page.slug}`,
-    lastModified: new Date(),
     changeFrequency: "yearly",
     priority: 0.5,
   }));
@@ -20,7 +19,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: SITE_URL,
-      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
     },
