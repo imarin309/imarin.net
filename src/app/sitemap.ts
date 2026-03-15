@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { posts } from "#site/content";
+import { posts, pages } from "#site/content";
 import { SITE_URL } from "@/constants/meta";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,13 +10,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const pageEntries: MetadataRoute.Sitemap = pages.map((page) => ({
+    url: `${SITE_URL}/${page.slug}`,
+    changeFrequency: "yearly",
+    priority: 0.5,
+  }));
+
   return [
     {
       url: SITE_URL,
-      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
     },
+    ...pageEntries,
     ...postEntries,
   ];
 }
