@@ -12,7 +12,7 @@ export function Footer() {
           プライバシーポリシー
         </Link>
         <p className="text-center text-zinc-500 text-sm">
-          © 2026 {SITE_TITLE}. All rights reserved.
+          © {new Date().getFullYear()} {SITE_TITLE}. All rights reserved.
         </p>
       </div>
     </footer>

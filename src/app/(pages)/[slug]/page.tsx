@@ -3,12 +3,15 @@ import { pages } from "#site/content";
 import { MDXContent } from "@/components/mdx/MDXContent";
 import type { Metadata } from "next";
 
-function getPageBySlug(slug: string) {
-  return pages.find((page) => page.slug === slug);
+export function generateStaticParams() {
+  return pages.map((page) => ({ slug: page.slug }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = getPageBySlug("about");
+type Props = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const page = pages.find((p) => p.slug === slug);
 
   if (!page) {
     return {};
@@ -24,8 +27,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function AboutPage() {
-  const page = getPageBySlug("about");
+export default async function StaticPage({ params }: Props) {
+  const { slug } = await params;
+  const page = pages.find((p) => p.slug === slug);
 
   if (!page) {
     notFound();
