@@ -5,8 +5,7 @@ import { PostCard } from "./PostCard";
 import { CategoryFilter } from "./CategoryFilter";
 import { cn } from "@/lib/utils";
 import type { Post } from "#site/content";
-
-const POSTS_PER_PAGE = 2;
+import { POSTS_PER_PAGE } from "@/constants/config";
 
 interface PostListProps {
   posts: Post[];

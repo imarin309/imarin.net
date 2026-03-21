@@ -1,9 +1,9 @@
 {
-  "ignores": ["content/drafts"],
+  "ignores": ["content/drafts", "content/archive"],
   "config": {
     "MD013": false,
     "MD033": {
-      "allowed_elements": ["span"],
+      "allowed_elements": ["span", "RakutenCard", "RakutenCardImage"],
     },
   },
 }
