@@ -31,4 +31,5 @@ yarn-error.log*
 next-env.d.ts
 
 /content/drafts/*
+/content/archive/*
 /migration/*
