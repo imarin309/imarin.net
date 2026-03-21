@@ -1,4 +1,1 @@
-export const categoryList = [
-  "All",
-  "書評",
-];
+export const categoryList = ["All", "書評"];
