@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Code2 } from "lucide-react";
+import Image from "next/image";
 import { SITE_TITLE, SITE_CATCHCOPY } from "@/constants/meta";
 
 export function Header() {
@@ -11,7 +11,7 @@ export function Header() {
             href="/"
             className="flex items-center gap-2 hover:opacity-70 transition-opacity"
           >
-            <Code2 className="w-6 h-6 text-zinc-900" />
+            <Image src="/ahiru.png" alt="" width={40} height={40} />
             <div className="flex flex-col">
               <span className="text-xl font-medium text-zinc-900 leading-tight">
                 {SITE_TITLE}
