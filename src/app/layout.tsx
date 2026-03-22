@@ -39,6 +39,14 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_TITLE,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -46,6 +54,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-screen bg-zinc-50">
         <Header />
         <main>{children}</main>
