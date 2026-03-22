@@ -8,6 +8,7 @@ const pages = defineCollection({
     .object({
       title: s.string().max(100),
       description: s.string().max(300).optional(),
+      date: s.isodate().optional(),
       slug: s.path(),
       content: s.mdx(),
     })
