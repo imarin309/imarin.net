@@ -54,13 +54,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <head>
+      <body className="min-h-screen bg-zinc-50">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd)
+              .replace(/</g, "\\u003c")
+              .replace(/>/g, "\\u003e")
+              .replace(/&/g, "\\u0026"),
+          }}
         />
-      </head>
-      <body className="min-h-screen bg-zinc-50">
         <Header />
         <main>{children}</main>
         <Footer />
