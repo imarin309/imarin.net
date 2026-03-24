@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -13,7 +14,7 @@ export function generateStaticParams() {
   return posts.map((post) => ({ id: post.slug }));
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const post = posts.find((p) => p.slug === id);
   if (!post) return {};
