@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { GoogleAnalytics } from "@/components/google/GoogleAnalytics";
+import { GoogleAdSense } from "@/components/google/GoogleAdSense";
 import {
   SITE_TITLE,
   SITE_DESCRIPTION,
@@ -55,6 +57,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="min-h-screen bg-zinc-50">
+        {process.env.NODE_ENV === "production" &&
+          process.env.CF_PAGES_BRANCH === "main" && (
+            <>
+              <GoogleAnalytics />
+              <GoogleAdSense />
+            </>
+          )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
