@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: SITE_TITLE,
       title,
       description,
-      images: [{ url: "/icon.png" }],
+      images: [{ url: "/og-image.png" }],
       locale: "ja_JP",
       publishedTime: post.date,
     },
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary",
       title,
       description,
-      images: ["/icon.png"],
+      images: ["/og-image.png"],
     },
     alternates: {
       canonical: url,

@@ -22,17 +22,16 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_CATCHCOPY,
     // TODO: SNSシェア時のサムネイル用に 1200×630px の専用画像を用意して差し替える
-    images: [{ url: "/icon.png" }],
+    images: [{ url: "/og-image.png" }],
     locale: "ja_JP",
   },
   twitter: {
     card: "summary",
     title: SITE_TITLE,
     description: SITE_CATCHCOPY,
-    images: ["/icon.png"], // TODO: 上記OGP画像と合わせて差し替える
+    images: ["/og-image.png"], // TODO: 上記OGP画像と合わせて差し替える
   },
   icons: {
-    icon: "/icon.png",
     apple: "/apple-icon.png",
   },
   alternates: {
