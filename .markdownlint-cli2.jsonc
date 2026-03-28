@@ -2,6 +2,7 @@
   "ignores": ["content/drafts", "content/archive"],
   "config": {
     "MD013": false,
+    "MD034": false,
     "MD033": {
       "allowed_elements": ["span"],
     },
