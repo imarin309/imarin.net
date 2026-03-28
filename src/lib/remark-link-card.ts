@@ -17,6 +17,7 @@ async function fetchOGP(url: string): Promise<OGPData> {
       headers: { "User-Agent": "Mozilla/5.0 (compatible; LinkCardBot/1.0)" },
       signal: AbortSignal.timeout(5000),
     });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
 
     const getMetaContent = (property: string) => {
@@ -38,11 +39,22 @@ async function fetchOGP(url: string): Promise<OGPData> {
 
     const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
 
+    const rawImage = getMetaContent("og:image");
+    const image = rawImage
+      ? (() => {
+          try {
+            return new URL(rawImage, url).toString();
+          } catch {
+            return "";
+          }
+        })()
+      : "";
+
     return {
       title: getMetaContent("og:title") || titleMatch?.[1] || url,
       description:
         getMetaContent("og:description") || getMetaContent("description") || "",
-      image: getMetaContent("og:image") || "",
+      image,
       favicon,
     };
   } catch {
@@ -87,26 +99,24 @@ export const remarkLinkCard: Plugin<[], Root> = () => {
       chunk.forEach((url, j) => ogpCache.set(url, results[j]));
     }
 
-    await Promise.all(
-      tasks.map(async ({ parent, index, url }) => {
-        const ogp = ogpCache.get(url)!;
-        parent.children[index] = {
-          type: "mdxJsxFlowElement",
-          name: "LinkCard",
-          attributes: [
-            { type: "mdxJsxAttribute", name: "url", value: url },
-            { type: "mdxJsxAttribute", name: "title", value: ogp.title },
-            {
-              type: "mdxJsxAttribute",
-              name: "description",
-              value: ogp.description,
-            },
-            { type: "mdxJsxAttribute", name: "image", value: ogp.image },
-            { type: "mdxJsxAttribute", name: "favicon", value: ogp.favicon },
-          ],
-          children: [],
-        };
-      }),
-    );
+    for (const { parent, index, url } of tasks) {
+      const ogp = ogpCache.get(url)!;
+      parent.children[index] = {
+        type: "mdxJsxFlowElement",
+        name: "LinkCard",
+        attributes: [
+          { type: "mdxJsxAttribute", name: "url", value: url },
+          { type: "mdxJsxAttribute", name: "title", value: ogp.title },
+          {
+            type: "mdxJsxAttribute",
+            name: "description",
+            value: ogp.description,
+          },
+          { type: "mdxJsxAttribute", name: "image", value: ogp.image },
+          { type: "mdxJsxAttribute", name: "favicon", value: ogp.favicon },
+        ],
+        children: [],
+      };
+    }
   };
 };
