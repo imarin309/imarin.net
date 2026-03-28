@@ -1,5 +1,6 @@
 import { defineConfig, defineCollection, s } from "velite";
 import remarkBreaks from "remark-breaks";
+import { remarkLinkCard } from "./src/lib/remark-link-card";
 
 const pages = defineCollection({
   name: "Page",
@@ -47,7 +48,7 @@ export default defineConfig({
   },
   collections: { posts, pages },
   mdx: {
-    remarkPlugins: [remarkBreaks],
+    remarkPlugins: [remarkBreaks, remarkLinkCard],
     rehypePlugins: [],
   },
 });

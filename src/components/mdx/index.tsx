@@ -1,5 +1,5 @@
 import { CodeBlock } from "../CodeBlock";
-import { RakutenCard, RakutenCardImage } from "./RakutenCard";
+import { LinkCard } from "./LinkCard";
 
 interface PreProps {
   children?: React.ReactNode;
@@ -19,6 +19,5 @@ function Pre({ children }: PreProps) {
 
 export const mdxComponents = {
   pre: Pre,
-  RakutenCard,
-  RakutenCardImage,
+  LinkCard,
 };
