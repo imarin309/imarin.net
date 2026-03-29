@@ -4,7 +4,7 @@
     "MD013": false,
     "MD034": false,
     "MD033": {
-      "allowed_elements": ["span"],
+      "allowed_elements": ["span", "br"],
     },
   },
 }
