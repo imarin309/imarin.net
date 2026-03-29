@@ -1,6 +1,11 @@
+import dynamic from "next/dynamic";
 import { CodeBlock } from "../CodeBlock";
 import { LinkCard } from "./LinkCard";
-import { MermaidBlock } from "./MermaidBlock";
+
+const MermaidBlock = dynamic(
+  () => import("./MermaidBlock").then((mod) => ({ default: mod.MermaidBlock })),
+  { ssr: false },
+);
 
 interface PreProps {
   children?: React.ReactNode;

@@ -35,6 +35,7 @@ export function MermaidBlock({ value }: MermaidBlockProps) {
           return (
             <button
               key={tab}
+              type="button"
               onClick={() => setShowRaw(tab === "Raw")}
               className={`px-4 py-2 text-xs font-medium transition-colors ${
                 active
