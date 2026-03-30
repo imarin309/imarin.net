@@ -1,3 +1,5 @@
+import { SITE_URL } from "../src/constants/meta";
+
 export async function onRequest(context: {
   request: Request;
   next: () => Promise<Response>;
@@ -9,10 +11,7 @@ export async function onRequest(context: {
   // 本番の pages.dev URL は <project>.pages.dev（3セグメント）
   const parts = url.hostname.split(".");
   if (parts.length === 3 && url.hostname.endsWith(".pages.dev")) {
-    const redirectUrl = new URL(
-      url.pathname + url.search,
-      "https://imarin.net",
-    );
+    const redirectUrl = new URL(url.pathname + url.search, SITE_URL);
     return Response.redirect(redirectUrl.toString(), 308);
   }
 
