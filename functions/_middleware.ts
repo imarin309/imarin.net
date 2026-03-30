@@ -1,10 +1,7 @@
-export async function onRequest(
-  context: EventContext<
-    Record<string, unknown>,
-    string,
-    Record<string, unknown>
-  >,
-) {
+export async function onRequest(context: {
+  request: Request;
+  next: () => Promise<Response>;
+}) {
   const url = new URL(context.request.url);
 
   // *.pages.dev（プレビューデプロイを除く）を imarin.net にリダイレクト
