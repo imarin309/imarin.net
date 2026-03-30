@@ -30,6 +30,7 @@
     ".velite/**/*.ts",
     "velite.config.ts",
     "next.config.ts",
+    "functions/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
