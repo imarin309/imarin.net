@@ -11,7 +11,9 @@ export async function onRequest(context: {
   // 本番の pages.dev URL は <project>.pages.dev（3セグメント）
   const parts = url.hostname.split(".");
   if (parts.length === 3 && url.hostname.endsWith(".pages.dev")) {
-    const redirectUrl = new URL(url.pathname + url.search, SITE_URL);
+    const redirectUrl = new URL(SITE_URL);
+    redirectUrl.pathname = url.pathname;
+    redirectUrl.search = url.search;
     return Response.redirect(redirectUrl.toString(), 308);
   }
 
