@@ -16,16 +16,9 @@ export function Header() {
               <span className="text-xl font-medium text-zinc-900 leading-tight">
                 {SITE_TITLE}
               </span>
-              <span className="text-xs text-zinc-500">{SITE_CATCHCOPY}</span>
             </div>
           </Link>
           <nav className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="text-zinc-600 hover:text-zinc-900 transition-colors text-sm"
-            >
-              記事一覧
-            </Link>
             <Link
               href="/about"
               className="text-zinc-600 hover:text-zinc-900 transition-colors text-sm"
