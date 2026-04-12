@@ -5,11 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## コマンド
 
 ```bash
-npm run dev      # Velite のウォッチ + Next.js 開発サーバーを同時起動
-npm run build    # Velite でコンテンツをビルド → Next.js ビルド
-npm run lint     # ESLint（next lint）
-npm run start    # 本番サーバー起動
-npm run velite   # Velite 単体実行
+pnpm dev      # Velite のウォッチ + Next.js 開発サーバーを同時起動
+pnpm build    # Velite でコンテンツをビルド → Next.js ビルド
+pnpm lint     # ESLint（next lint）
+pnpm start    # 本番サーバー起動
+pnpm velite   # Velite 単体実行
 ```
 
 テストは設定されていない。
@@ -31,7 +31,7 @@ MDX のフロントマター必須フィールド：
 - `/` → 記事一覧（`src/app/page.tsx`）：全記事を日付降順で表示
 - `/post/[id]` → 記事詳細（`src/app/post/[id]/page.tsx`）：`id` は slug
 
-静的生成（`generateStaticParams`）を使用しており、Velite のデータが必要なので、ビルド前に必ず Velite を実行する必要がある（`npm run build` で自動実行される）。
+静的生成（`generateStaticParams`）を使用しており、Velite のデータが必要なので、ビルド前に必ず Velite を実行する必要がある（`pnpm build` で自動実行される）。
 
 ### MDX レンダリング
 
