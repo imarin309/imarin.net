@@ -2,6 +2,7 @@
   "name": "engineer-blog",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "velite --watch & next dev",
     "build": "velite && next build",
@@ -9,7 +10,7 @@
     "lint": "prettier --check . && eslint && markdownlint-cli2 \"content/**/*.mdx\"",
     "format": "prettier --write . && eslint --fix && markdownlint-cli2 --fix \"content/**/*.mdx\"",
     "velite": "velite",
-    "update": "npx npm-check-updates -u --reject eslint-plugin-mdx,markdownlint-cli2 && npm install --legacy-peer-deps && npm audit fix --legacy-peer-deps"
+    "update": "pnpm dlx npm-check-updates -u --reject eslint-plugin-mdx,markdownlint-cli2 && pnpm install"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -23,6 +24,12 @@
     "tailwind-merge": "^3.5.0",
     "unist-util-visit": "^5.1.0",
     "velite": "^0.3.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16",
