@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Geist, Noto_Sans_JP } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/google/GoogleAnalytics";
@@ -10,6 +11,17 @@ import {
   SITE_CATCHCOPY,
 } from "@/constants/meta";
 import "./globals.css";
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+});
+
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto-sans-jp",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -55,7 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
+    <html lang="ja" className={`${geist.variable} ${notoSansJP.variable}`}>
       <body className="min-h-screen bg-zinc-50">
         {process.env.NODE_ENV === "production" &&
           process.env.CF_PAGES_BRANCH === "main" && (

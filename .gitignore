@@ -33,3 +33,6 @@ next-env.d.ts
 /content/drafts/*
 /content/archive/*
 /migration/*
+
+.claude/settings.local.json
+.claude/plan.md

@@ -17,8 +17,8 @@
 
 html {
   font-family:
-    "Geist",
-    "Noto Sans JP",
+    var(--font-geist),
+    var(--font-noto-sans-jp),
     system-ui,
     -apple-system,
     sans-serif;
