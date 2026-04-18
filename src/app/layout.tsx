@@ -18,8 +18,8 @@ const geist = Geist({
 });
 
 const notoSansJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  subsets: ["latin", "japanese"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-noto-sans-jp",
 });
 

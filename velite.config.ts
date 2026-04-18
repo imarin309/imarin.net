@@ -32,10 +32,10 @@ const posts = defineCollection({
       raw: s.raw(),
       content: s.mdx(),
     })
-    .transform((data) => ({
+    .transform(({ raw, ...data }) => ({
       ...data,
       slug: data.slug.replace(/^posts\//, ""),
-      excerpt: data.raw
+      excerpt: raw
         .replace(/^---[\s\S]*?---\n?/, "") // frontmatter
         .replace(/```[\s\S]*?```/g, "") // コードブロック
         .replace(/`[^`]*`/g, "") // インラインコード
