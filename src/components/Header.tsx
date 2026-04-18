@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { SITE_TITLE, SITE_CATCHCOPY } from "@/constants/meta";
+import { SITE_TITLE } from "@/constants/meta";
 
 export function Header() {
   return (

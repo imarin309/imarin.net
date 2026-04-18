@@ -36,17 +36,17 @@ const posts = defineCollection({
       ...data,
       slug: data.slug.replace(/^posts\//, ""),
       excerpt: data.raw
-        .replace(/^---[\s\S]*?---\n?/, "")   // frontmatter
-        .replace(/```[\s\S]*?```/g, "")       // コードブロック
-        .replace(/`[^`]*`/g, "")              // インラインコード
-        .replace(/!\[.*?\]\(.*?\)/g, "")      // 画像
+        .replace(/^---[\s\S]*?---\n?/, "") // frontmatter
+        .replace(/```[\s\S]*?```/g, "") // コードブロック
+        .replace(/`[^`]*`/g, "") // インラインコード
+        .replace(/!\[.*?\]\(.*?\)/g, "") // 画像
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // リンク → テキストのみ
-        .replace(/^#{1,6}\s+/gm, "")         // 見出し
-        .replace(/^[-*_]{3,}\s*$/gm, "")     // 水平線
-        .replace(/^[>*+-]\s+/gm, "")         // blockquote・リスト記号
-        .replace(/\*\*(.+?)\*\*/g, "$1")     // bold
+        .replace(/^#{1,6}\s+/gm, "") // 見出し
+        .replace(/^[-*_]{3,}\s*$/gm, "") // 水平線
+        .replace(/^[>*+-]\s+/gm, "") // blockquote・リスト記号
+        .replace(/\*\*(.+?)\*\*/g, "$1") // bold
         .replace(/__(.+?)__/g, "$1")
-        .replace(/\*(.+?)\*/g, "$1")         // italic
+        .replace(/\*(.+?)\*/g, "$1") // italic
         .replace(/_(.+?)_/g, "$1")
         .replace(/\n+/g, " ")
         .trim()
