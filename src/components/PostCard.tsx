@@ -22,12 +22,12 @@ export function PostCard({ post }: PostCardProps) {
           </span>
         </div>
 
-        <h2 className="text-xl font-medium mb-3 text-zinc-900 group-hover:text-zinc-600 transition-colors">
+        <h2 className="text-xl font-normal mb-3 text-zinc-900 group-hover:text-zinc-600 transition-colors">
           {post.title}
         </h2>
 
         <p className="text-zinc-600 mb-4 line-clamp-2 text-sm leading-relaxed">
-          {post.description}
+          {post.excerpt}
         </p>
 
         <div className="flex items-center gap-4 text-sm text-zinc-500">

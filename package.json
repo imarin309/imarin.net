@@ -13,7 +13,6 @@
     "update": "pnpm dlx npm-check-updates -u --reject eslint-plugin-mdx,markdownlint-cli2 && pnpm install"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "lucide-react": "^1.7.0",
     "mermaid": "^11.13.0",
     "next": "^16.2.1",

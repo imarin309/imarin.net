@@ -13,7 +13,7 @@ export function Header() {
           >
             <Image src="/ahiru.png" alt="" width={40} height={40} />
             <div className="flex flex-col">
-              <span className="text-xl font-medium text-zinc-900 leading-tight">
+              <span className="text-xl font-normal text-zinc-900 leading-tight">
                 {SITE_TITLE}
               </span>
             </div>
