@@ -20,6 +20,12 @@ export type Page = {
 const postsDir = path.join(process.cwd(), "content/posts");
 const pagesDir = path.join(process.cwd(), "content/pages");
 
+// gray-matter は YAML の日付をDate型で返すことがあるため YYYY-MM-DD に正規化する
+function normalizeDate(value: unknown): string {
+  if (value instanceof Date) return value.toISOString().slice(0, 10);
+  return String(value ?? "");
+}
+
 function parsePost(filename: string): Post {
   const slug = filename.replace(/\.mdx$/, "");
   const raw = fs.readFileSync(path.join(postsDir, filename), "utf-8");
@@ -29,7 +35,7 @@ function parsePost(filename: string): Post {
   return {
     slug,
     title: String(data.title ?? ""),
-    date: String(data.date ?? ""),
+    date: normalizeDate(data.date),
     category: String(data.category ?? ""),
     description: data.description ? String(data.description) : undefined,
     excerpt,
