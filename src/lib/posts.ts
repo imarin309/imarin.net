@@ -32,11 +32,20 @@ function parsePost(filename: string): Post {
   const { data, content } = matter(raw);
   const excerpt = content.trim().slice(0, 120);
 
+  const title = String(data.title ?? "");
+  const date = normalizeDate(data.date);
+  const category = String(data.category ?? "");
+
+  if (!title) throw new Error(`[${filename}] frontmatter に title が必要です`);
+  if (!category) throw new Error(`[${filename}] frontmatter に category が必要です`);
+  if (!date || isNaN(new Date(date).getTime()))
+    throw new Error(`[${filename}] frontmatter の date が不正です: "${data.date}"`);
+
   return {
     slug,
-    title: String(data.title ?? ""),
-    date: normalizeDate(data.date),
-    category: String(data.category ?? ""),
+    title,
+    date,
+    category,
     description: data.description ? String(data.description) : undefined,
     excerpt,
   };
@@ -47,9 +56,12 @@ function parsePage(filename: string): Page {
   const raw = fs.readFileSync(path.join(pagesDir, filename), "utf-8");
   const { data } = matter(raw);
 
+  const title = String(data.title ?? "");
+  if (!title) throw new Error(`[${filename}] frontmatter に title が必要です`);
+
   return {
     slug,
-    title: String(data.title ?? ""),
+    title,
     description: data.description ? String(data.description) : undefined,
   };
 }
