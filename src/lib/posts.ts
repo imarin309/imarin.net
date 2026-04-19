@@ -37,9 +37,12 @@ function parsePost(filename: string): Post {
   const category = String(data.category ?? "");
 
   if (!title) throw new Error(`[${filename}] frontmatter に title が必要です`);
-  if (!category) throw new Error(`[${filename}] frontmatter に category が必要です`);
+  if (!category)
+    throw new Error(`[${filename}] frontmatter に category が必要です`);
   if (!date || isNaN(new Date(date).getTime()))
-    throw new Error(`[${filename}] frontmatter の date が不正です: "${data.date}"`);
+    throw new Error(
+      `[${filename}] frontmatter の date が不正です: "${data.date}"`,
+    );
 
   return {
     slug,
