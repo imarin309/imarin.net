@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Calendar } from "lucide-react";
-import type { Post } from "#site/content";
+import type { Post } from "@/lib/posts";
 
 interface PostCardProps {
   post: Post;

@@ -1,4 +1,4 @@
-import { posts } from "#site/content";
+import { getAllPosts } from "@/lib/posts";
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL } from "@/constants/meta";
 
 export const dynamic = "force-static";
@@ -6,6 +6,7 @@ export const dynamic = "force-static";
 const escapeCDATA = (str: string) => str.replace(/]]>/g, "]]]]><![CDATA[>");
 
 export function GET() {
+  const posts = getAllPosts();
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );

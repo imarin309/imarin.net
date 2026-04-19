@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PostCard } from "./PostCard";
 import { CategoryFilter } from "./CategoryFilter";
 import { cn } from "@/lib/utils";
-import type { Post } from "#site/content";
+import type { Post } from "@/lib/posts";
 import { POSTS_PER_PAGE } from "@/constants/config";
 
 interface PostListProps {

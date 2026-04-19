@@ -1,8 +1,9 @@
 import { PostList } from "@/components/PostList";
-import { posts } from "#site/content";
+import { getAllPosts } from "@/lib/posts";
 import { categoryList } from "@/constants/categories";
 
 export default function Home() {
+  const posts = getAllPosts();
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );

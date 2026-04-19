@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { posts } from "#site/content";
-import { MDXContent } from "@/components/mdx/MDXContent";
+import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { mdxComponents } from "@/components/mdx";
 import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION } from "@/constants/meta";
 
 interface Props {
@@ -11,12 +11,12 @@ interface Props {
 }
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ id: post.slug }));
+  return getAllPosts().map((post) => ({ id: post.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const post = posts.find((p) => p.slug === id);
+  const post = getPostBySlug(id);
   if (!post) return {};
 
   const title = `${post.title} | ${SITE_TITLE}`;
@@ -50,9 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PostPage({ params }: Props) {
   const { id } = await params;
-  const post = posts.find((p) => p.slug === id);
+  const post = getPostBySlug(id);
 
   if (!post) notFound();
+
+  const { default: PostContent } = await import(
+    `../../../../content/posts/${id}.mdx`
+  );
 
   const formattedDate = new Date(post.date).toLocaleDateString("ja-JP", {
     year: "numeric",
@@ -90,7 +94,6 @@ export default async function PostPage({ params }: Props) {
             .replace(/&/g, "\\u0026"),
         }}
       />
-      {/* 戻るボタン */}
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors mb-8 text-sm"
@@ -99,7 +102,6 @@ export default async function PostPage({ params }: Props) {
         記事一覧に戻る
       </Link>
 
-      {/* ヘッダー情報 */}
       <header className="mb-10">
         <div className="flex items-center gap-2 mb-4">
           <span className="px-3 py-1 bg-zinc-100 text-zinc-700 text-sm rounded-md">
@@ -119,9 +121,8 @@ export default async function PostPage({ params }: Props) {
 
       <hr className="border-zinc-200 mb-10" />
 
-      {/* 本文 */}
       <article className="prose prose-zinc max-w-none">
-        <MDXContent code={post.content} />
+        <PostContent components={mdxComponents} />
       </article>
     </div>
   );
