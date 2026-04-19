@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
-import { posts, pages } from "#site/content";
+import { getAllPosts, getAllPages } from "@/lib/posts";
 import { SITE_URL } from "@/constants/meta";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const posts = getAllPosts();
+  const pages = getAllPages();
+
   const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
     url: `${SITE_URL}/post/${post.slug}`,
     lastModified: new Date(post.date),

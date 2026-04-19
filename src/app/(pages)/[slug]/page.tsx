@@ -1,17 +1,17 @@
 import { notFound } from "next/navigation";
-import { pages } from "#site/content";
-import { MDXContent } from "@/components/mdx/MDXContent";
+import { getAllPages, getPageBySlug } from "@/lib/posts";
+import { mdxComponents } from "@/components/mdx";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
-  return pages.map((page) => ({ slug: page.slug }));
+  return getAllPages().map((page) => ({ slug: page.slug }));
 }
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const page = pages.find((p) => p.slug === slug);
+  const page = getPageBySlug(slug);
 
   if (!page) {
     return {};
@@ -29,11 +29,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StaticPage({ params }: Props) {
   const { slug } = await params;
-  const page = pages.find((p) => p.slug === slug);
+  const page = getPageBySlug(slug);
 
   if (!page) {
     notFound();
   }
+
+  const { default: PageContent } = await import(
+    `../../../../content/pages/${slug}.mdx`
+  );
 
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
@@ -47,7 +51,7 @@ export default async function StaticPage({ params }: Props) {
       </header>
 
       <div className="prose prose-zinc max-w-none prose-headings:font-semibold">
-        <MDXContent code={page.content} />
+        <PageContent components={mdxComponents} />
       </div>
     </article>
   );
