@@ -56,6 +56,8 @@ export function getAllPosts(): Post[] {
 export function getPostBySlug(slug: string): Post | undefined {
   const filename = `${slug}.mdx`;
   const filepath = path.join(postsDir, filename);
+  // 念の為ディレクトリトラバーサルを防ぐため、postsDir 配下に収まっているか確認
+  if (!filepath.startsWith(postsDir + path.sep)) return undefined;
   if (!fs.existsSync(filepath)) return undefined;
   return parsePost(filename);
 }
@@ -68,6 +70,8 @@ export function getAllPages(): Page[] {
 export function getPageBySlug(slug: string): Page | undefined {
   const filename = `${slug}.mdx`;
   const filepath = path.join(pagesDir, filename);
+  // 念の為ディレクトリトラバーサルを防ぐため、pagesDir 配下に収まっているか確認
+  if (!filepath.startsWith(pagesDir + path.sep)) return undefined;
   if (!fs.existsSync(filepath)) return undefined;
   return parsePage(filename);
 }
