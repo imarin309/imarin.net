@@ -28,3 +28,58 @@ body {
   background-color: #f9fafb;
   color: #18181b;
 }
+
+.directive-sm,
+.prose .directive-sm {
+  font-size: 0.85em;
+}
+
+.directive-large,
+.prose .directive-large {
+  font-size: 1.25em;
+}
+
+.directive-xl,
+.prose .directive-xl {
+  font-size: 1.5em;
+}
+
+.directive-red,
+.prose .directive-red {
+  color: #dc2626;
+}
+
+.directive-blue,
+.prose .directive-blue {
+  color: #2563eb;
+}
+
+.directive-green,
+.prose .directive-green {
+  color: #16a34a;
+}
+
+.directive-yellow,
+.prose .directive-yellow {
+  color: #ca8a04;
+}
+
+.directive-orange,
+.prose .directive-orange {
+  color: #ea580c;
+}
+
+.directive-pink,
+.prose .directive-pink {
+  color: #db2777;
+}
+
+.directive-purple,
+.prose .directive-purple {
+  color: #9333ea;
+}
+
+.directive-gray,
+.prose .directive-gray {
+  color: #6b7280;
+}
