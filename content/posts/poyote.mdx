@@ -103,38 +103,6 @@ https://github.com/videojs/video.js/issues/6316
 
 対応としては、`currentTime` を書き換えた直後、一時停止中なら一瞬 `play()` → `pause()` を挟んでシークを強制的に確定させる、という力技で解決しました。
 
-```typescript
-const commitSeek = (node: HTMLVideoElement) => {
-  if (!node.paused) {
-    return
-  }
-
-  void node.play().then(() => node.pause()).catch(() => {})
-}
-
-const seekTo = (time: number) => {
-  const node = nodeRef.current
-  if (!node || !Number.isFinite(node.duration)) {
-    return
-  }
-
-  node.currentTime = clampTime(time, node.duration)
-  commitSeek(node)
-}
-```
-
-ただ `play()` を呼ぶだけだと、iOS Safariでは条件によって勝手にネイティブのフルスクリーン再生に切り替わってしまうことがあるので、`<video>` 側に `playsInline` をつけてインライン再生を維持するようにしています。
-
-```typescript
-<video
-  ref={videoRef}
-  src={video.objectUrl}
-  controls
-  playsInline
-  className="w-full rounded-md bg-black"
-/>
-```
-
 修正した対象のPR
 
 https://github.com/imarin309/poyote/pull/17
