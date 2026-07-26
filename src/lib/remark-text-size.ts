@@ -25,10 +25,12 @@ export function remarkTextSize() {
       if (!(ALL_DIRECTIVES as readonly string[]).includes(node.name)) return;
 
       const data = node.data || (node.data = {});
+      const existingClasses = data.hProperties?.className ?? [];
+
       data.hName = "span";
       data.hProperties = {
         ...data.hProperties,
-        className: [`directive-${node.name}`],
+        className: [...existingClasses, `directive-${node.name}`],
       };
     });
   };
