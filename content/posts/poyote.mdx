@@ -1,0 +1,170 @@
+---
+title: "動画から好きなフレームを切り抜いて保存するツール「poyote」を個人開発でつくった話"
+date: 2026-07-25
+category: 個人開発
+description: "動画から任意のフレームを切り抜いて保存できるツールpoyoteを、React・TypeScript・Viteで個人開発した話です。ブラウザ完結の設計やiOS Safariのシークバグへの対応など、開発の過程も紹介します。"
+---
+{/*
+ペルソナ
+
+- 個人開発をしたいプログラミング初心者
+- typescript/reactに関心がある人
+- 動画から素材抽出したいクリエイター/ブロガー
+- サーバーレス/プライバシー重視の設計に興味がある人
+- AIコーディング(Claude/ChatGPTなど)で個人開発した過程に興味がある人
+*/}
+
+## はじめに
+
+今回は「動画のキャプチャを抽出しやすくする」ツールを作って公開したので、そのツールの紹介と、作る過程で詰まったところの話をまとめます。
+
+### モチベーション
+
+趣味として、プラモデルの塗装をするときの過程を残すブログを運営しています。
+
+https://calm-corner.com/
+
+このブログ記事を書くのは楽しいんですが、、:large[:red[制作風景の録画からブログの画像を抽出する作業が面倒]]というのが課題としてありました。
+
+1工程1時間くらいある録画データが7個くらいあって、それを一つ一つ塗装する前後を確認して、スクショをとっていたのですがこれが気の遠くなるような作業でした。
+
+制作が終わって記事も書こうと思ったけど、画像抽出するのが面倒で1ヶ月くらい寝かせて記事を書くモチベがなくなる、、なんてこともありました。
+
+これの対策として録画データをClaudeやChatGPTに読ませて「塗装する前後のキャプチャだけ取り出して候補を3個ずつだして」みたいに指示したりもしたんですが、いいアウトプットは出ませんでした。
+（録画データは非構造化データすぎてAIへのinputとしてうまく読み込めなかったのか？）
+
+そんな感じで作ったのがこのpoyoteでした。
+
+## つくったもの: poyote
+
+動画から好きなフレームを切り抜いて画像保存するツール、poyoteを作ってみました。
+
+https://poyote.imarin.net/
+
+https://github.com/imarin309/poyote
+
+### 使い方
+
+1. 画像をアップロードする
+
+<ImageGallery
+  images={[
+        { src: "https://asset.imarin.net/posts/poyote/poyote_top.webp", alt: "poyoteのトップ画面。動画ファイルをアップロードする画面", caption: "アップロード" },
+    ]}  
+/>
+
+1. アップロードされたら自動で一定間隔でサムネイルを自動で出す。
+
+<ImageGallery
+  images={[
+        { src: "https://asset.imarin.net/posts/poyote/poyote_upload.webp", alt: "動画アップロード後、一定間隔でサムネイルが自動生成された画面", caption: "自動でサムネが出る" },
+    ]}  
+/>
+
+1. サムネイルを基準に、抽出したい場所を選ぶ
+
+<ImageGallery
+  images={[
+        { src: "https://asset.imarin.net/posts/poyote/poyote_adjustment.webp", alt: "サムネイルを基準にキャプチャする再生位置を調整している画面", caption: "キャプチャする場所を調節する" },
+    ]}  
+/>
+
+1. キャプチャを保存する
+
+<ImageGallery
+  images={[
+        { src: "https://asset.imarin.net/posts/poyote/poyote_save.webp", alt: "調整したキャプチャ画像を保存する画面", caption: "保存" },
+    ]}  
+/>
+
+## 技術構成
+
+- 言語: TypeScript
+- フロントエンド: React + Vite
+- スタイル: Tailwind CSS v4
+- テスト: Vitest + Testing Library
+- パッケージマネージャ: pnpm
+- ホスティング: Cloudflare Pages
+
+状態管理はuseStateとuseRefだけで完結させています。個人ツールで画面も1枚しかないので、ライブラリを増やすほうがコストが高いと判断しました。
+
+クライアントのみで動かして、サーバーはありません。動画ファイルはブラウザの中だけで処理していて、どこにもアップロードされません。静的ファイルを置くだけでデプロイが終わるので運用が楽だし、人の動画を預からずに済むので気も楽です。
+
+## 開発で苦労したこと
+
+### 再生位置がズレる問題
+
+このアプリでは表示されているサムネイルをクリック/タップしたら、その再生位置にジャンプするという機能があるのですが、モバイル（ios/chrome）でタップしたときだけその挙動がおかしかったことがありました。
+
+症状としては
+
+> シークバーの位置は動くが映像は変わらず、再生ボタンを押すと元の位置から再生される
+
+というもので、PCでは全く問題なく動いていました。Claudeに調査してもらったところ、行き着いたのはWebKit(iOS Safari)でよく知られているこの挙動でした。
+
+:large[一時停止中の `<video>` に `currentTime` を書き込んでも、シークが内部的に確定しないことがある。]
+
+シークバーの見た目(`currentTime` の読み取り値)はすぐ更新されるので一見動いたように見えるのですが、実際にデコードされたフレームがそこに追いついていません。そのまま再生を再開すると、確定していなかった分、古い位置から再生が始まってしまう、という仕組みでした。
+
+同じ症状はvideo.jsやvimeo player.jsのissueでも報告されていて、モバイルSafariではそこそこ知られた「あるある」バグのようでした。
+
+https://github.com/videojs/video.js/issues/6316
+
+対応としては、`currentTime` を書き換えた直後、一時停止中なら一瞬 `play()` → `pause()` を挟んでシークを強制的に確定させる、という力技で解決しました。
+
+```typescript
+const commitSeek = (node: HTMLVideoElement) => {
+  if (!node.paused) {
+    return
+  }
+
+  void node.play().then(() => node.pause()).catch(() => {})
+}
+
+const seekTo = (time: number) => {
+  const node = nodeRef.current
+  if (!node || !Number.isFinite(node.duration)) {
+    return
+  }
+
+  node.currentTime = clampTime(time, node.duration)
+  commitSeek(node)
+}
+```
+
+ただ `play()` を呼ぶだけだと、iOS Safariでは条件によって勝手にネイティブのフルスクリーン再生に切り替わってしまうことがあるので、`<video>` 側に `playsInline` をつけてインライン再生を維持するようにしています。
+
+```typescript
+<video
+  ref={videoRef}
+  src={video.objectUrl}
+  controls
+  playsInline
+  className="w-full rounded-md bg-black"
+/>
+```
+
+修正した対象のPR
+
+https://github.com/imarin309/poyote/pull/17
+
+PCでは何の問題もなく動いていたので、実機を触るまで気づけないバグでした。
+
+## 作ってみた感想
+
+:large[ブログ記事書くのがめちゃ楽になった！]
+
+10秒ごとにサムネイルが自動で作成されるので、動画の再生時刻を細かく調節して確認して、、みたいな作業が不要になって大分楽になった。
+
+大体以前は（画像抽出する作業が面倒でダラダラやってたからなのですが）1週間くらいこの作業をしていたのを、30分から1時間くらいに短縮できました。
+
+## おわり
+
+このツールを使って下記の記事を書きました。単純作業の割合が減って記事を書くのが楽しくなりました。
+
+https://calm-corner.com/posts/figure-rise-standard-tifa#塗装
+
+今回は個人開発で作ったものの共有でしたが、困っていることを自分で解決できるのが個人開発のいいところだと思います。
+cloudflareでのデプロイやAIエージェントを使ったコーディングを使えば、以前とは比較にならないスピードでリリースできるのでいい時代になったなと思います。
+
+ではまた( ´ ▽ ` )
