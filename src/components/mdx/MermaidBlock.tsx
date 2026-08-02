@@ -20,11 +20,16 @@ export function MermaidBlock({ value }: MermaidBlockProps) {
     }
 
     const id = `mermaid-${Math.random().toString(36).slice(2)}`;
-    mermaid.render(id, value).then(({ svg }) => {
-      if (ref.current) {
-        ref.current.innerHTML = svg;
-      }
-    });
+    mermaid
+      .render(id, value)
+      .then(({ svg }) => {
+        if (ref.current) {
+          ref.current.innerHTML = svg;
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to render mermaid diagram", error);
+      });
   }, [value]);
 
   return (
