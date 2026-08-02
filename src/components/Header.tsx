@@ -25,6 +25,20 @@ export function Header() {
             >
               About
             </Link>
+            <Link
+              href="/contact"
+              className="text-zinc-600 hover:text-zinc-900 transition-colors text-sm"
+            >
+              Contact
+            </Link>
+            <Link
+              href="https://github.com/imarin309/imarin.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-600 hover:text-zinc-900 transition-colors text-sm"
+            >
+              GitHub
+            </Link>
           </nav>
         </div>
       </div>
