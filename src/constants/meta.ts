@@ -4,3 +4,4 @@ export const SITE_CATCHCOPY =
   "技術的な挑戦、学び、気づきをアウトプットするブログ";
 export const SITE_DESCRIPTION =
   "技術的な挑戦、学び、気づきをアウトプットするブログ。";
+export const SITE_EMAIL = "contact@imarin.net";
