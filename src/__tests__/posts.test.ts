@@ -89,6 +89,76 @@ describe("getAllPosts", () => {
 
     expect(getAllPosts()).toHaveLength(1);
   });
+
+  describe("excerpt", () => {
+    function excerptFor(body: string): string {
+      mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+      mockFs.readFileSync.mockReturnValue(
+        `---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\n---\n${body}`,
+      );
+      return getAllPosts()[0].excerpt;
+    }
+
+    it("strips heading lines entirely, not just the # marker", () => {
+      expect(excerptFor("## 内容について\n本文です。")).toBe("本文です。");
+    });
+
+    it("strips list markers but keeps the item text", () => {
+      expect(
+        excerptFor("- 1章 理解しやすいコード\n- 2章 名前に情報を詰め込む"),
+      ).toBe("1章 理解しやすいコード 2章 名前に情報を詰め込む");
+    });
+
+    it("removes a bare URL line that would become a LinkCard", () => {
+      expect(
+        excerptFor(
+          "本文の前半です。\n\nhttps://example.com/article\n\n本文の後半です。",
+        ),
+      ).toBe("本文の前半です。 本文の後半です。");
+    });
+
+    it("keeps link text but drops the URL", () => {
+      expect(
+        excerptFor("[リーダブルコード](https://example.com/book)を読んだ"),
+      ).toBe("リーダブルコードを読んだ");
+    });
+
+    it("removes code blocks entirely", () => {
+      expect(excerptFor("説明文\n\n```js\nconst x = 1;\n```\n\n続きの文")).toBe(
+        "説明文 続きの文",
+      );
+    });
+
+    it("keeps inline code content but drops the backticks", () => {
+      expect(excerptFor("`pnpm dev` で起動する")).toBe("pnpm dev で起動する");
+    });
+
+    it("strips bold/italic/strikethrough markers but keeps the text", () => {
+      expect(excerptFor("**重要**な話と*補足*と~~削除線~~")).toBe(
+        "重要な話と補足と削除線",
+      );
+    });
+
+    it("strips blockquote markers", () => {
+      expect(excerptFor("> 引用文です")).toBe("引用文です");
+    });
+
+    it("removes horizontal rules", () => {
+      expect(excerptFor("前半\n\n---\n\n後半")).toBe("前半 後半");
+    });
+
+    it("strips JSX/HTML tags", () => {
+      expect(
+        excerptFor('<LinkCard url="https://example.com" title="foo" />本文'),
+      ).toBe("本文");
+    });
+
+    it("collapses newlines and surrounding whitespace into single spaces", () => {
+      expect(excerptFor("  1行目  \n\n  2行目  \n\n  3行目  ")).toBe(
+        "1行目 2行目 3行目",
+      );
+    });
+  });
 });
 
 describe("getPostBySlug", () => {

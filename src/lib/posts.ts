@@ -26,11 +26,34 @@ function normalizeDate(value: unknown): string {
   return String(value ?? "");
 }
 
+// 記事一覧カードの抜粋用に、Markdown記法を取り除いた本文だけのテキストに変換する
+function markdownToPlainText(markdown: string): string {
+  let text = markdown;
+
+  text = text.replace(/```[\s\S]*?```/g, ""); // コードブロック
+  text = text.replace(/`([^`]*)`/g, "$1"); // インラインコード
+  text = text.replace(/!\[[^\]]*\]\([^)]*\)/g, ""); // 画像
+  text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1"); // リンク
+  text = text.replace(/^https?:\/\/\S+$/gm, ""); // LinkCard化される裸のURL行
+  text = text.replace(/<[^>]+>/g, ""); // JSX/HTMLタグ
+  text = text.replace(/:[a-z]+\[([^\]]*)\]/gi, "$1"); // remark-directiveのインライン記法
+  text = text.replace(/^:::.*$/gm, ""); // remark-directiveのブロック記法
+  text = text.replace(/^#{1,6}\s+.*$/gm, ""); // 見出し行ごと除去
+  text = text.replace(/^>\s?/gm, ""); // 引用記号
+  text = text.replace(/^\s*([-*+]|\d+\.)\s+/gm, ""); // リスト記号
+  text = text.replace(/^(-{3,}|\*{3,}|_{3,})$/gm, ""); // 水平線
+  text = text.replace(/(\*\*|__)(.*?)\1/g, "$2"); // 強調
+  text = text.replace(/(\*|_)(.*?)\1/g, "$2"); // 強調
+  text = text.replace(/~~(.*?)~~/g, "$1"); // 打ち消し線
+
+  return text.replace(/\s+/g, " ").trim();
+}
+
 function parsePost(filename: string): Post {
   const slug = filename.replace(/\.mdx$/, "");
   const raw = fs.readFileSync(path.join(postsDir, filename), "utf-8");
   const { data, content } = matter(raw);
-  const excerpt = content.trim().slice(0, 120);
+  const excerpt = markdownToPlainText(content).slice(0, 120);
 
   const title = String(data.title ?? "");
   const date = normalizeDate(data.date);
