@@ -31,14 +31,14 @@ export function Header() {
             >
               Contact
             </Link>
-            <Link
+            <a
               href="https://github.com/imarin309/imarin.net"
               target="_blank"
               rel="noopener noreferrer"
               className="text-zinc-600 hover:text-zinc-900 transition-colors text-sm"
             >
               GitHub
-            </Link>
+            </a>
           </nav>
         </div>
       </div>
