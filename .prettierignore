@@ -4,3 +4,4 @@ build/
 .velite/
 node_modules/
 content/
+pnpm-lock.yaml
