@@ -8,12 +8,13 @@ import { SITE_TITLE } from "@/constants/meta";
 
 const navLinks = [
   { href: "/about", label: "About", external: false },
-  { href: "/contact", label: "Contact", external: false },
+  { href: "/development", label: "Development", external: false },
   {
     href: "https://github.com/imarin309/imarin.net",
     label: "GitHub",
     external: true,
   },
+  { href: "/contact", label: "Contact", external: false },
 ];
 
 export function Header() {
