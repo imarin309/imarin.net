@@ -30,8 +30,18 @@ export function Header() {
       }
     }
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [isMenuOpen]);
 
   return (
@@ -43,11 +53,9 @@ export function Header() {
             className="flex items-center gap-2 hover:opacity-70 transition-opacity"
           >
             <Image src="/ahiru.png" alt="" width={40} height={40} />
-            <div className="flex flex-col">
-              <span className="text-xl font-normal text-zinc-900 leading-tight">
-                {SITE_TITLE}
-              </span>
-            </div>
+            <span className="text-xl font-normal text-zinc-900 leading-tight">
+              {SITE_TITLE}
+            </span>
           </Link>
 
           <nav className="hidden sm:flex items-center gap-4">
@@ -78,7 +86,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setIsMenuOpen((open) => !open)}
-              aria-label="メニューを開く"
+              aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"}
               aria-expanded={isMenuOpen}
               className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors"
             >
