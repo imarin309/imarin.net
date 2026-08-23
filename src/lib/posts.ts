@@ -36,7 +36,7 @@ function markdownToPlainText(markdown: string): string {
   text = text.replace(/\[([^\]]*)\]\([^)]*\)/g, "$1"); // リンク
   text = text.replace(/^https?:\/\/\S+$/gm, ""); // LinkCard化される裸のURL行
   text = text.replace(/<[^>]+>/g, ""); // JSX/HTMLタグ
-  text = text.replace(/:[a-z]+\[([^\]]*)\]/gi, "$1"); // remark-directiveのインライン記法
+  text = text.replace(/:{1,2}[a-z]+\[([^\]]*)\]/gi, "$1"); // remark-directiveのインライン/リーフ記法
   text = text.replace(/^:::.*$/gm, ""); // remark-directiveのブロック記法
   text = text.replace(/^#{1,6}\s+.*$/gm, ""); // 見出し行ごと除去
   text = text.replace(/^>\s?/gm, ""); // 引用記号
