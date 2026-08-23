@@ -33,6 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [{ ...SITE_OG_IMAGE, alt: page.title }],
       locale: "ja_JP",
     },
+    // twitter も openGraph と同じく丸ごと置き換わるため、
+    // 指定しないと layout.tsx のサイト名がそのまま残ってしまう
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.description,
+      images: [SITE_OG_IMAGE.url],
+    },
   };
 }
 
