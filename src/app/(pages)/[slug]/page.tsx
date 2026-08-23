@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getAllPages, getPageBySlug } from "@/lib/posts";
 import { mdxComponents } from "@/components/mdx";
+import { SITE_OG_IMAGE } from "@/lib/og";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -21,8 +22,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title,
     description: page.description,
     openGraph: {
+      // openGraph は指定したオブジェクトで丸ごと置き換わるので、
+      // layout.tsx の画像を引き継ぐには明示的に渡す必要がある
       title: page.title,
       description: page.description,
+      images: [{ ...SITE_OG_IMAGE, alt: page.title }],
     },
   };
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { mdxComponents } from "@/components/mdx";
+import { getOgImage } from "@/lib/og";
 import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION } from "@/constants/meta";
 
 interface Props {
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${post.title} | ${SITE_TITLE}`;
   const description = post.description ?? SITE_DESCRIPTION;
   const url = `${SITE_URL}/post/${post.slug}`;
+  const ogImage = getOgImage(post);
 
   return {
     title,
@@ -32,15 +34,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: SITE_TITLE,
       title,
       description,
-      images: [{ url: "/og-image.png" }],
+      images: [{ ...ogImage, alt: post.title }],
       locale: "ja_JP",
       publishedTime: post.date,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title,
       description,
-      images: ["/og-image.png"],
+      images: [ogImage.url],
     },
     alternates: {
       canonical: url,

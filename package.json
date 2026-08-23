@@ -14,6 +14,7 @@
     "format": "prettier --write . && eslint --fix && markdownlint-cli2 --fix \"content/**/*.mdx\"",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "og": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/generate-og.ts",
     "update": "pnpm dlx npm-check-updates -u --reject eslint-plugin-mdx,markdownlint-cli2 && pnpm install"
   },
   "dependencies": {
