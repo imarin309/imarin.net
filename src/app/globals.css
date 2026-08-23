@@ -83,3 +83,25 @@ body {
 .prose .directive-gray {
   color: #6b7280;
 }
+
+/* 出典表記（::cite[...]）。行を独立させたときだけブロックとして扱う */
+.directive-cite,
+.prose .directive-cite {
+  font-size: 0.85em;
+  font-style: normal;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.prose > .directive-cite,
+.prose blockquote > .directive-cite {
+  display: block;
+  margin-top: 1em;
+  text-align: right;
+}
+
+/* typographyがblockquoteに付ける引用符を出典には付けない */
+.prose blockquote .directive-cite::before,
+.prose blockquote .directive-cite::after {
+  content: none;
+}
