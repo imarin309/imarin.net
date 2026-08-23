@@ -8,6 +8,8 @@ export type Post = {
   date: string;
   category: string;
   description?: string;
+  // OGP画像を自動生成分から差し替えたいときだけ frontmatter に書く（任意）
+  ogImage?: string;
   excerpt: string;
 };
 
@@ -73,6 +75,7 @@ function parsePost(filename: string): Post {
     date,
     category,
     description: data.description ? String(data.description) : undefined,
+    ogImage: data.ogImage ? String(data.ogImage) : undefined,
     excerpt,
   };
 }

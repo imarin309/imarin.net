@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getAllPages, getPageBySlug } from "@/lib/posts";
 import { mdxComponents } from "@/components/mdx";
+import { SITE_OG_IMAGE } from "@/lib/og";
+import { SITE_TITLE, SITE_URL } from "@/constants/meta";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
@@ -21,8 +23,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: page.title,
     description: page.description,
     openGraph: {
+      // openGraph は指定したオブジェクトで丸ごと置き換わるため、
+      // layout.tsx の設定は引き継がれない。必要な項目は明示的に渡す
+      type: "website",
+      url: `${SITE_URL}/${page.slug}`,
+      siteName: SITE_TITLE,
       title: page.title,
       description: page.description,
+      images: [{ ...SITE_OG_IMAGE, alt: page.title }],
+      locale: "ja_JP",
+    },
+    // twitter も openGraph と同じく丸ごと置き換わるため、
+    // 指定しないと layout.tsx のサイト名がそのまま残ってしまう
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.description,
+      images: [SITE_OG_IMAGE.url],
     },
   };
 }

@@ -10,6 +10,7 @@ import {
   SITE_URL,
   SITE_CATCHCOPY,
 } from "@/constants/meta";
+import { SITE_OG_IMAGE } from "@/lib/og";
 import "./globals.css";
 
 const geist = Geist({
@@ -33,15 +34,14 @@ export const metadata: Metadata = {
     siteName: SITE_TITLE,
     title: SITE_TITLE,
     description: SITE_CATCHCOPY,
-    // TODO: SNSシェア時のサムネイル用に 1200×630px の専用画像を用意して差し替える
-    images: [{ url: "/og-image.png" }],
+    images: [{ ...SITE_OG_IMAGE, alt: SITE_TITLE }],
     locale: "ja_JP",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_CATCHCOPY,
-    images: ["/og-image.png"], // TODO: 上記OGP画像と合わせて差し替える
+    images: [SITE_OG_IMAGE.url],
   },
   icons: {
     apple: "/apple-icon.png",

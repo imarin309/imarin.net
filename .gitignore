@@ -15,6 +15,10 @@ build/
 .env.test.local
 .env.production.local
 
+# OGP画像の生成物とフォント（生成は pnpm og、成果物はR2に手動アップロード）
+.og/
+.fonts/
+
 # misc
 **/.DS_Store
 *.pem

@@ -9,6 +9,7 @@ pnpm dev      # Next.js 開発サーバー起動（webpack使用）
 pnpm build    # Next.js ビルド（webpack使用）
 pnpm lint     # ESLint（next lint）
 pnpm start    # 本番サーバー起動
+pnpm og       # OGP画像を生成（--force で作り直し、slug指定も可）
 ```
 
 テストは設定されていない。
@@ -42,6 +43,16 @@ MDX ファイルを動的インポートで直接 React コンポーネントと
 - `LinkCard` → OGPカード
 
 Turbopackはremarkプラグインとの互換性問題があるためwebpackを使用している（`--webpack`フラグ）。
+
+### OGP画像
+
+SNSでシェアされたときのサムネイル。`scripts/generate-og.ts` が `next/og` で 1200×630 の PNG を生成し、`.og/`（gitignore）に出力する。**R2 へのアップロードは手動**で、`asset.imarin.net` の `og/` 配下に `.og/` の生成物をそのままの名前で置く（記事が `og/<slug>.png`、サイト共通が `og/site.png`）。
+
+URLの組み立ては `src/lib/og.ts` に集約している。frontmatter に `ogImage`（任意）があればそちらを優先し、その記事は生成対象から外れる。
+
+日本語フォントは satori がシステムフォントを見ないため OTF を読み込む必要がある（woff2 は非対応）。`.fonts/` に無ければスクリプトが取得する。こちらも gitignore。
+
+**記事の公開時はアップロードをデプロイより先に済ませる**（Xは取得結果をキャッシュするため）。
 
 ### カテゴリ
 
