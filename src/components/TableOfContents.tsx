@@ -96,7 +96,8 @@ export function TableOfContents() {
 
   return (
     <>
-      {/* デスクトップ: 右側に固定表示 */}
+      {/* デスクトップ: 右側に固定表示。ここが見えている間は
+          記事先頭の ArticleToc を隠している */}
       <nav
         aria-label="目次"
         className="fixed right-6 top-1/2 z-30 hidden max-h-[70vh] w-52 -translate-y-1/2 overflow-y-auto rounded-lg border border-zinc-200 bg-white/95 p-4 shadow-sm backdrop-blur-sm xl:block"
@@ -105,7 +106,9 @@ export function TableOfContents() {
         {list()}
       </nav>
 
-      {/* モバイル: 丸ボタン + ボトムシート */}
+      {/* モバイル: 丸ボタン + ボトムシート。
+          記事先頭には ArticleToc が出ているので、こちらは読み進めた後に
+          目次へ戻るための手段 */}
       <button
         type="button"
         onClick={() => setIsOpen(true)}

@@ -8,8 +8,12 @@ interface ArticleTocProps {
 /**
  * 記事本文の先頭に置く目次。
  *
- * 見出しはビルド時に抜き出しているので静的HTMLに含まれ、JSが無効でも
- * 読める。読んでいる間の追従表示は TableOfContents（クライアント側）が担う。
+ * 見出しはビルド時に抜き出しているので静的HTMLに含まれ、JSが無効でも読める。
+ *
+ * xl 以上では TableOfContents の追従パネルが常時見えていて重複するため隠す。
+ * 逆に xl 未満では追従パネルが無く、ボタンをタップしないと目次に辿り着けない
+ * ので、ここで最初から見えるようにしている。ブレークポイントは
+ * TableOfContents 側の `xl:block` / `xl:hidden` と対になっている。
  */
 export function ArticleToc({ headings }: ArticleTocProps) {
   // 見出しが1つ以下の記事では目次を出さない
@@ -18,7 +22,7 @@ export function ArticleToc({ headings }: ArticleTocProps) {
   return (
     <nav
       aria-labelledby="article-toc-title"
-      className="mb-10 rounded-lg border border-zinc-200 bg-white px-5 py-4"
+      className="mb-10 rounded-lg border border-zinc-200 bg-white px-5 py-4 xl:hidden"
     >
       <p
         id="article-toc-title"
