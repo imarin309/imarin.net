@@ -33,7 +33,9 @@
     "remark-directive": "^4.0.0",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
     "tailwind-merge": "^3.6.0",
+    "unified": "^11.0.5",
     "unist-util-visit": "^5.1.0"
   },
   "pnpm": {
@@ -67,7 +69,6 @@
     "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
-    "unified": "^11.0.5",
     "vitest": "^4.1.10"
   }
 }
