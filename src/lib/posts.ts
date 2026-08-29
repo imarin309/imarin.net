@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { extractHeadings, type TocHeading } from "./toc";
 
 export type Post = {
   slug: string;
@@ -49,6 +50,15 @@ function markdownToPlainText(markdown: string): string {
   text = text.replace(/~~(.*?)~~/g, "$1"); // 打ち消し線
 
   return text.replace(/\s+/g, " ").trim();
+}
+
+// 念の為ディレクトリトラバーサルを防ぐため、想定ディレクトリ配下に
+// 収まっているファイルだけを返す
+function resolveContentFile(dir: string, slug: string): string | undefined {
+  const filepath = path.join(dir, `${slug}.mdx`);
+  if (!filepath.startsWith(dir + path.sep)) return undefined;
+  if (!fs.existsSync(filepath)) return undefined;
+  return filepath;
 }
 
 function parsePost(filename: string): Post {
@@ -101,12 +111,17 @@ export function getAllPosts(): Post[] {
 }
 
 export function getPostBySlug(slug: string): Post | undefined {
-  const filename = `${slug}.mdx`;
-  const filepath = path.join(postsDir, filename);
-  // 念の為ディレクトリトラバーサルを防ぐため、postsDir 配下に収まっているか確認
-  if (!filepath.startsWith(postsDir + path.sep)) return undefined;
-  if (!fs.existsSync(filepath)) return undefined;
-  return parsePost(filename);
+  if (!resolveContentFile(postsDir, slug)) return undefined;
+  return parsePost(`${slug}.mdx`);
+}
+
+// 記事先頭に置く目次用。見出しはビルド時に本文から抜き出す
+export function getPostHeadings(slug: string): TocHeading[] {
+  const filepath = resolveContentFile(postsDir, slug);
+  if (!filepath) return [];
+
+  const { content } = matter(fs.readFileSync(filepath, "utf-8"));
+  return extractHeadings(content);
 }
 
 export function getAllPages(): Page[] {
@@ -115,10 +130,6 @@ export function getAllPages(): Page[] {
 }
 
 export function getPageBySlug(slug: string): Page | undefined {
-  const filename = `${slug}.mdx`;
-  const filepath = path.join(pagesDir, filename);
-  // 念の為ディレクトリトラバーサルを防ぐため、pagesDir 配下に収まっているか確認
-  if (!filepath.startsWith(pagesDir + path.sep)) return undefined;
-  if (!fs.existsSync(filepath)) return undefined;
-  return parsePage(filename);
+  if (!resolveContentFile(pagesDir, slug)) return undefined;
+  return parsePage(`${slug}.mdx`);
 }

@@ -1,14 +1,13 @@
 import { Pre } from "./Pre";
 import { LinkCard } from "./LinkCard";
 import { ImageGallery } from "./ImageGallery";
-
-function H2({ children }: { children?: React.ReactNode }) {
-  return <h2 className="border-b border-current pb-1">{children}</h2>;
-}
+import { H2, H3, H4 } from "./Heading";
 
 export const mdxComponents = {
   pre: Pre,
   h2: H2,
+  h3: H3,
+  h4: H4,
   LinkCard,
   ImageGallery,
 };

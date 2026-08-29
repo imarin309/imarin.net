@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts, getPostBySlug, getPostHeadings } from "@/lib/posts";
 import { mdxComponents } from "@/components/mdx";
+import { TableOfContents } from "@/components/TableOfContents";
+import { ArticleToc } from "@/components/ArticleToc";
 import { getOgImage } from "@/lib/og";
 import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION } from "@/constants/meta";
 
@@ -55,6 +57,8 @@ export default async function PostPage({ params }: Props) {
   const post = getPostBySlug(id);
 
   if (!post) notFound();
+
+  const headings = getPostHeadings(id);
 
   const { default: PostContent } = await import(
     `../../../../content/posts/${id}.mdx`
@@ -123,9 +127,13 @@ export default async function PostPage({ params }: Props) {
 
       <hr className="border-zinc-200 mb-10" />
 
+      <ArticleToc headings={headings} />
+
       <article className="prose prose-zinc max-w-none">
         <PostContent components={mdxComponents} />
       </article>
+
+      <TableOfContents />
     </div>
   );
 }
