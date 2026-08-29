@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { TableOfContents } from "@/components/TableOfContents";
 
@@ -22,6 +22,7 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   document.body.innerHTML = "";
+  document.body.style.overflow = "";
 });
 
 function renderArticle(html: string) {
@@ -83,5 +84,45 @@ describe("TableOfContents", () => {
     `);
 
     expect(container.innerHTML).toBe("");
+  });
+
+  describe("ボトムシート", () => {
+    function openSheet() {
+      renderArticle(`
+        <h2 id="a" data-toc-heading="2" data-toc-text="A">A</h2>
+        <h2 id="b" data-toc-heading="2" data-toc-text="B">B</h2>
+      `);
+      fireEvent.click(screen.getByRole("button", { name: "目次を開く" }));
+    }
+
+    it("Escape で閉じる", () => {
+      openSheet();
+      expect(screen.getByRole("button", { name: "目次を閉じる" })).toBeTruthy();
+
+      fireEvent.keyDown(document, { key: "Escape" });
+
+      expect(screen.queryByRole("button", { name: "目次を閉じる" })).toBeNull();
+    });
+
+    it("開いている間だけ背面スクロールを止め、元の値に戻す", () => {
+      document.body.style.overflow = "auto";
+
+      openSheet();
+      expect(document.body.style.overflow).toBe("hidden");
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(document.body.style.overflow).toBe("auto");
+    });
+
+    it("閉じているときは body の overflow に触らない", () => {
+      document.body.style.overflow = "auto";
+
+      renderArticle(`
+        <h2 id="a" data-toc-heading="2" data-toc-text="A">A</h2>
+        <h2 id="b" data-toc-heading="2" data-toc-text="B">B</h2>
+      `);
+
+      expect(document.body.style.overflow).toBe("auto");
+    });
   });
 });

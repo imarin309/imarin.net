@@ -45,11 +45,22 @@ export function TableOfContents() {
     return () => observer.disconnect();
   }, []);
 
-  // ボトムシート表示中は背面のスクロールを止める
+  // ボトムシート表示中は背面のスクロールを止め、Escapeで閉じられるようにする。
+  // overflow は決め打ちで "" に戻さず、開く直前の値を退避して復元する
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen]);
 
