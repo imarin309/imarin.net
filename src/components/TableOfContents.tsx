@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { List, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,15 @@ export function TableOfContents() {
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const openButtonRef = useRef<HTMLButtonElement>(null);
+
+  // 閉じたらシートを開いたボタンにフォーカスを戻す。
+  // 目次リンクを踏んだときは呼ばない（アンカー移動先のフォーカスを奪わないため）
+  const closeSheet = useCallback(() => {
+    setIsOpen(false);
+    openButtonRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     // 見出しはMDXがレンダリングしたDOMから収集する
@@ -53,8 +62,34 @@ export function TableOfContents() {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // ダイアログ自体にフォーカスを移してタイトルを読み上げさせる
+    sheetRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === "Escape") {
+        closeSheet();
+        return;
+      }
+
+      // aria-modal="true" を宣言している以上、Tab でシート外へ出られると
+      // 読み上げ上は存在しない要素にフォーカスが移ってしまうので閉じ込める
+      if (event.key !== "Tab" || !sheetRef.current) return;
+
+      const focusable =
+        sheetRef.current.querySelectorAll<HTMLElement>("a[href], button");
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+
+      if (event.shiftKey && (active === first || active === sheetRef.current)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", handleKeyDown);
 
@@ -62,7 +97,7 @@ export function TableOfContents() {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, closeSheet]);
 
   // 見出しが1つ以下の記事では目次を出さない
   if (headings.length < 2) return null;
@@ -110,6 +145,7 @@ export function TableOfContents() {
           記事先頭には ArticleToc が出ているので、こちらは読み進めた後に
           目次へ戻るための手段 */}
       <button
+        ref={openButtonRef}
         type="button"
         onClick={() => setIsOpen(true)}
         aria-label="目次を開く"
@@ -120,27 +156,33 @@ export function TableOfContents() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 xl:hidden">
+          <div className="absolute inset-0 bg-black/40" onClick={closeSheet} />
           <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setIsOpen(false)}
-          />
-          <nav
-            aria-label="目次"
-            className="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl"
+            ref={sheetRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="toc-sheet-title"
+            tabIndex={-1}
+            className="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-y-auto rounded-t-2xl bg-white p-5 shadow-xl outline-none"
           >
             <div className="mb-3 flex items-center justify-between">
-              <p className="text-sm font-medium text-zinc-700">目次</p>
+              <p
+                id="toc-sheet-title"
+                className="text-sm font-medium text-zinc-700"
+              >
+                目次
+              </p>
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={closeSheet}
                 aria-label="目次を閉じる"
                 className="text-zinc-400 hover:text-zinc-600"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
-            {list(() => setIsOpen(false))}
-          </nav>
+            <nav aria-label="目次">{list(() => setIsOpen(false))}</nav>
+          </div>
         </div>
       )}
     </>

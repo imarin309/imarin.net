@@ -124,5 +124,57 @@ describe("TableOfContents", () => {
 
       expect(document.body.style.overflow).toBe("auto");
     });
+
+    it("ダイアログとして読み上げられる属性を持つ", () => {
+      openSheet();
+
+      const dialog = screen.getByRole("dialog");
+      expect(dialog.getAttribute("aria-modal")).toBe("true");
+      // aria-labelledby がタイトルを指していること
+      const titleId = dialog.getAttribute("aria-labelledby");
+      expect(document.getElementById(titleId!)?.textContent).toBe("目次");
+    });
+
+    it("開いたらダイアログにフォーカスが移る", () => {
+      openSheet();
+
+      expect(document.activeElement).toBe(screen.getByRole("dialog"));
+    });
+
+    it("閉じたら開いたボタンにフォーカスが戻る", () => {
+      openSheet();
+      fireEvent.click(screen.getByRole("button", { name: "目次を閉じる" }));
+
+      expect(document.activeElement).toBe(
+        screen.getByRole("button", { name: "目次を開く" }),
+      );
+    });
+
+    it("Tab がシートの外へ抜けない", () => {
+      openSheet();
+
+      const dialog = screen.getByRole("dialog");
+      const focusable = Array.from(
+        dialog.querySelectorAll<HTMLElement>("a[href], button"),
+      );
+      const last = focusable[focusable.length - 1];
+
+      last.focus();
+      fireEvent.keyDown(document, { key: "Tab" });
+      expect(document.activeElement).toBe(focusable[0]);
+
+      fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
+      expect(document.activeElement).toBe(last);
+    });
+
+    it("目次リンクを踏んだときはボタンにフォーカスを戻さない", () => {
+      openSheet();
+      const link = screen.getAllByRole("link", { name: "A" })[0];
+      fireEvent.click(link);
+
+      expect(document.activeElement).not.toBe(
+        screen.getByRole("button", { name: "目次を開く" }),
+      );
+    });
   });
 });
