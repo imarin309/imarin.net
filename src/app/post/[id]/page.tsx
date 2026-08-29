@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { getAllPosts, getPostBySlug } from "@/lib/posts";
 import { mdxComponents } from "@/components/mdx";
+import { TableOfContents } from "@/components/TableOfContents";
 import { getOgImage } from "@/lib/og";
 import { SITE_TITLE, SITE_URL, SITE_DESCRIPTION } from "@/constants/meta";
 
@@ -126,6 +127,8 @@ export default async function PostPage({ params }: Props) {
       <article className="prose prose-zinc max-w-none">
         <PostContent components={mdxComponents} />
       </article>
+
+      <TableOfContents />
     </div>
   );
 }
