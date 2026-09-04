@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Noto_Sans_JP } from "next/font/google";
 import { Header } from "@/components/Header";
+import { HeroHeader } from "@/components/HeroHeader";
 import { Footer } from "@/components/Footer";
 import { GoogleAnalytics } from "@/components/google/GoogleAnalytics";
 import { GoogleAdSense } from "@/components/google/GoogleAdSense";
@@ -86,6 +87,7 @@ export default function RootLayout({
           }}
         />
         <Header />
+        <HeroHeader />
         <main>{children}</main>
         <Footer />
       </body>
