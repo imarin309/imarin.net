@@ -33,7 +33,7 @@ export function PostCard({ post }: PostCardProps) {
         <div className="flex items-center gap-4 text-sm text-zinc-500">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
-            <span>{formattedDate}</span>
+            <time dateTime={post.date}>{formattedDate}</time>
           </div>
         </div>
       </article>
