@@ -24,7 +24,7 @@ export const works: Work[] = [
     url: "https://seki-saki.com/",
     github: "https://github.com/imarin309/seki-saki.com",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
-    relatedPostSlugs: ["make_contact_form"],
+    relatedPostSlugs: ["make_contact_form", "designmd"],
   },
   {
     title: "calm-corner.com",
@@ -34,14 +34,6 @@ export const works: Work[] = [
     github: "https://github.com/imarin309/calm_corner.com",
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
     relatedPostSlugs: ["migration_from_wordpress"],
-  },
-  {
-    title: "now-imarin.com",
-    description: "アニメ、ゲームの感想記事を書くブログ",
-    category: "ブログ",
-    url: "https://now-imarin.com/",
-    github: "https://github.com/imarin309/now-imarin.com",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
   },
   {
     title: "nanoka",
@@ -67,5 +59,6 @@ export const works: Work[] = [
     url: "https://matoriko.imarin.net/",
     github: "https://github.com/imarin309/Matoriko",
     tags: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+    relatedPostSlugs: ["make-mind-memo"],
   },
 ];
