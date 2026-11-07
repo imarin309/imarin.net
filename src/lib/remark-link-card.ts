@@ -64,6 +64,13 @@ async function fetchOGP(url: string): Promise<OGPData> {
 
 const URL_REGEX = /^https?:\/\/\S+$/;
 
+const TWEET_URL_REGEX =
+  /^https?:\/\/(?:www\.|mobile\.)?(?:x|twitter)\.com\/[^/]+\/status\/(\d+)/;
+
+export function getTweetId(url: string): string | null {
+  return url.match(TWEET_URL_REGEX)?.[1] ?? null;
+}
+
 export const remarkLinkCard: Plugin<[], Root> = () => {
   return async (tree) => {
     const tasks: Array<{ parent: Parent; index: number; url: string }> = [];
@@ -90,7 +97,8 @@ export const remarkLinkCard: Plugin<[], Root> = () => {
       }
     });
 
-    const uniqueUrls = [...new Set(tasks.map((t) => t.url))];
+    const cardTasks = tasks.filter((t) => getTweetId(t.url) === null);
+    const uniqueUrls = [...new Set(cardTasks.map((t) => t.url))];
     const CONCURRENCY = 5;
     const ogpCache = new Map<string, OGPData>();
     for (let i = 0; i < uniqueUrls.length; i += CONCURRENCY) {
@@ -100,6 +108,20 @@ export const remarkLinkCard: Plugin<[], Root> = () => {
     }
 
     for (const { parent, index, url } of tasks) {
+      const tweetId = getTweetId(url);
+      if (tweetId) {
+        parent.children[index] = {
+          type: "mdxJsxFlowElement",
+          name: "Tweet",
+          attributes: [
+            { type: "mdxJsxAttribute", name: "id", value: tweetId },
+            { type: "mdxJsxAttribute", name: "url", value: url },
+          ],
+          children: [],
+        };
+        continue;
+      }
+
       const ogp = ogpCache.get(url)!;
       parent.children[index] = {
         type: "mdxJsxFlowElement",

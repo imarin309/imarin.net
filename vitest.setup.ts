@@ -12,3 +12,7 @@ vi.stubGlobal(
       ),
   ),
 );
+
+// Tweet はビルド時に X から取得する async サーバーコンポーネントで、jsdom の
+// クライアント描画では動かない（react-tweet の CSS Modules も node では読めない）
+vi.mock("@/components/mdx/Tweet", () => ({ Tweet: () => null }));
