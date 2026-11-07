@@ -43,7 +43,16 @@
     "onlyBuiltDependencies": [
       "esbuild",
       "sharp"
-    ]
+    ],
+    "overrides": {
+      "lodash-es": "^4.18.1",
+      "vite": "^8.1.6",
+      "re2js": "^2.8.7",
+      "postcss-selector-parser": "^6.1.5",
+      "glob": "^14.0.2",
+      "minimatch": "^11.0.1",
+      "katex": "^0.18.2"
+    }
   },
   "devDependencies": {
     "@mdx-js/rollup": "^3.1.1",
