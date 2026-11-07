@@ -1,6 +1,7 @@
 import { Pre } from "./Pre";
 import { LinkCard } from "./LinkCard";
 import { ImageGallery } from "./ImageGallery";
+import { Video } from "./Video";
 import { H2, H3, H4 } from "./Heading";
 
 export const mdxComponents = {
@@ -10,4 +11,5 @@ export const mdxComponents = {
   h4: H4,
   LinkCard,
   ImageGallery,
+  Video,
 };
