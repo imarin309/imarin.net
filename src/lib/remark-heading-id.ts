@@ -1,7 +1,7 @@
 import { visit } from "unist-util-visit";
 import { toString } from "mdast-util-to-string";
 import type { Heading, Root } from "mdast";
-import { toSlug } from "./heading";
+import { toSlug } from "./heading.ts";
 
 /**
  * 見出し（h2〜h4）にアンカー用の id を付与する。

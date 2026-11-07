@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { extractHeadings, type TocHeading } from "./toc";
+import { extractHeadings, type TocHeading } from "./toc.ts";
 
 export type Post = {
   slug: string;
