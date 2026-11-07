@@ -84,6 +84,15 @@ body {
   color: #6b7280;
 }
 
+.directive-marker,
+.prose .directive-marker {
+  background: linear-gradient(transparent 60%, rgb(253 224 71 / 0.6) 60%);
+  /* 折り返して複数行になっても、各行に線が付くようにする */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 0.1em;
+}
+
 /* 出典表記（::cite[...]）。行を独立させたときだけブロックとして扱う */
 .directive-cite,
 .prose .directive-cite {
