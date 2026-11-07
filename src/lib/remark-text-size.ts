@@ -13,10 +13,12 @@ const TEXT_COLOR_DIRECTIVES = [
   "purple",
   "gray",
 ] as const;
+const TEXT_DECORATION_DIRECTIVES = ["marker"] as const;
 
 const ALL_DIRECTIVES = [
   ...TEXT_SIZE_DIRECTIVES,
   ...TEXT_COLOR_DIRECTIVES,
+  ...TEXT_DECORATION_DIRECTIVES,
 ] as const;
 
 export function remarkTextSize() {
