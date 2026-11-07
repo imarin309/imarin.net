@@ -16,16 +16,10 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <Link href={`/post/${post.slug}`} className="block group">
       <article className="border border-zinc-200 rounded-lg p-6 hover:border-zinc-400 hover:shadow-md transition-all bg-white">
-        <div className="flex flex-wrap items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3">
           <span className="px-3 py-1 bg-zinc-100 text-zinc-700 text-sm rounded-md">
             {post.category}
           </span>
-          {/* カード全体がリンクなので、タグをリンクにすると a の入れ子になる */}
-          {post.tags.map((tag) => (
-            <span key={tag.slug} className="text-sm text-zinc-500">
-              #{tag.label}
-            </span>
-          ))}
         </div>
 
         <h2 className="text-xl font-normal mb-3 text-zinc-900 group-hover:text-zinc-600 transition-colors">
@@ -36,11 +30,19 @@ export function PostCard({ post }: PostCardProps) {
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-4 text-sm text-zinc-500">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <time dateTime={post.date}>{formattedDate}</time>
           </div>
+          {/* カード全体がリンクなので、タグをリンクにすると a の入れ子になる */}
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-x-2">
+              {post.tags.map((tag) => (
+                <span key={tag.slug}>#{tag.label}</span>
+              ))}
+            </div>
+          )}
         </div>
       </article>
     </Link>
