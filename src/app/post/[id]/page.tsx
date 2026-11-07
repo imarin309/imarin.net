@@ -109,10 +109,19 @@ export default async function PostPage({ params }: Props) {
       </Link>
 
       <header className="mb-10">
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center gap-2 mb-4">
           <span className="px-3 py-1 bg-zinc-100 text-zinc-700 text-sm rounded-md">
             {post.category}
           </span>
+          {post.tags.map((tag) => (
+            <Link
+              key={tag.slug}
+              href={`/tag/${tag.slug}`}
+              className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors"
+            >
+              #{tag.label}
+            </Link>
+          ))}
         </div>
         <h1 className="text-3xl font-medium text-zinc-900 mb-4 leading-snug">
           {post.title}

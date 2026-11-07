@@ -2,6 +2,7 @@
 title: "記事のタイトル"
 date: 2026-01-01
 category: 個人開発
+tags: [cloudflare-workers]
 description: "検索結果やSNSカードに出る紹介文。100〜150文字くらいで、記事で何をしたか・何がわかるかを書く。"
 ---
 
@@ -11,6 +12,7 @@ description: "検索結果やSNSカードに出る紹介文。100〜150文字く
 - ファイル名がそのまま slug（URLは /post/ + slug）になる
 - frontmatter の必須項目は title / date / category
 - category は src/constants/categories.ts のどれか（個人開発 / 書評 / 雑記）
+- tags は任意。src/constants/tags.ts の slug を配列で書く（未登録だとビルドエラー）
 - ogImage は自動生成（pnpm og）なので通常は書かない。差し替えたいときだけ frontmatter に追加する
 - 記法の一覧はこのファイル末尾の「記法メモ」を参照
 */}

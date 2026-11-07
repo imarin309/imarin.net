@@ -38,6 +38,7 @@ describe("getAllPosts", () => {
         title: "Hello",
         date: "2024-01-01",
         category: "tech",
+        tags: [],
         description: undefined,
         excerpt: "body text here",
       },
@@ -79,6 +80,35 @@ describe("getAllPosts", () => {
     );
 
     expect(() => getAllPosts()).toThrow(/date/);
+  });
+
+  it("resolves tag slugs to their labels", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: [cloudflare-workers]\n---\nbody",
+    );
+
+    expect(getAllPosts()[0].tags).toEqual([
+      { slug: "cloudflare-workers", label: "Cloudflare Workers" },
+    ]);
+  });
+
+  it("throws when a tag is not registered", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: [unknown-tag]\n---\nbody",
+    );
+
+    expect(() => getAllPosts()).toThrow(/unknown-tag/);
+  });
+
+  it("throws when tags is not an array", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: cloudflare-workers\n---\nbody",
+    );
+
+    expect(() => getAllPosts()).toThrow(/tags/);
   });
 
   it("ignores non-.mdx files", () => {
