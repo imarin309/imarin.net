@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts, getAllPages } from "@/lib/posts";
+import { getAllPosts, getAllPages, getUsedTags } from "@/lib/posts";
 import { SITE_URL } from "@/constants/meta";
 
 export const dynamic = "force-static";
@@ -21,6 +21,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
+  const tagEntries: MetadataRoute.Sitemap = getUsedTags().map((tag) => ({
+    url: `${SITE_URL}/tag/${tag.slug}`,
+    changeFrequency: "weekly",
+    priority: 0.3,
+  }));
+
   return [
     {
       url: SITE_URL,
@@ -29,5 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...pageEntries,
     ...postEntries,
+    ...tagEntries,
   ];
 }

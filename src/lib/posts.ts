@@ -2,12 +2,14 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { extractHeadings, type TocHeading } from "./toc.ts";
+import { tagList, type Tag } from "../constants/tags.ts";
 
 export type Post = {
   slug: string;
   title: string;
   date: string;
   category: string;
+  tags: Tag[];
   description?: string;
   // OGP画像を自動生成分から差し替えたいときだけ frontmatter に書く（任意）
   ogImage?: string;
@@ -61,6 +63,22 @@ function resolveContentFile(dir: string, slug: string): string | undefined {
   return filepath;
 }
 
+// 表記揺れで同じ話題のタグが分裂しないよう、tagList にないものはビルドで止める
+function parseTags(filename: string, value: unknown): Tag[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value))
+    throw new Error(`[${filename}] frontmatter の tags は配列で書いてください`);
+
+  return value.map((slug) => {
+    const tag = tagList.find((t) => t.slug === String(slug));
+    if (!tag)
+      throw new Error(
+        `[${filename}] 未登録のタグです: "${slug}"（src/constants/tags.ts に追加してください）`,
+      );
+    return tag;
+  });
+}
+
 function parsePost(filename: string): Post {
   const slug = filename.replace(/\.mdx$/, "");
   const raw = fs.readFileSync(path.join(postsDir, filename), "utf-8");
@@ -84,6 +102,7 @@ function parsePost(filename: string): Post {
     title,
     date,
     category,
+    tags: parseTags(filename, data.tags),
     description: data.description ? String(data.description) : undefined,
     ogImage: data.ogImage ? String(data.ogImage) : undefined,
     excerpt,
@@ -108,6 +127,19 @@ function parsePage(filename: string): Page {
 export function getAllPosts(): Post[] {
   const files = fs.readdirSync(postsDir).filter((f) => f.endsWith(".mdx"));
   return files.map(parsePost);
+}
+
+export function getPostsByTag(tagSlug: string): Post[] {
+  return getAllPosts().filter((post) =>
+    post.tags.some((tag) => tag.slug === tagSlug),
+  );
+}
+
+export function getUsedTags(): Tag[] {
+  const usedSlugs = new Set(
+    getAllPosts().flatMap((post) => post.tags.map((tag) => tag.slug)),
+  );
+  return tagList.filter((tag) => usedSlugs.has(tag.slug));
 }
 
 export function getPostBySlug(slug: string): Post | undefined {

@@ -30,11 +30,19 @@ export function PostCard({ post }: PostCardProps) {
           {post.excerpt}
         </p>
 
-        <div className="flex items-center gap-4 text-sm text-zinc-500">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-zinc-500">
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <time dateTime={post.date}>{formattedDate}</time>
           </div>
+          {/* カード全体がリンクなので、タグをリンクにすると a の入れ子になる */}
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-x-2">
+              {post.tags.map((tag) => (
+                <span key={tag.slug}>#{tag.label}</span>
+              ))}
+            </div>
+          )}
         </div>
       </article>
     </Link>

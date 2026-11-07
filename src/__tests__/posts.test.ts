@@ -6,6 +6,8 @@ import {
   getAllPosts,
   getPageBySlug,
   getPostBySlug,
+  getPostsByTag,
+  getUsedTags,
 } from "@/lib/posts";
 
 vi.mock("fs", () => ({
@@ -38,6 +40,7 @@ describe("getAllPosts", () => {
         title: "Hello",
         date: "2024-01-01",
         category: "tech",
+        tags: [],
         description: undefined,
         excerpt: "body text here",
       },
@@ -79,6 +82,35 @@ describe("getAllPosts", () => {
     );
 
     expect(() => getAllPosts()).toThrow(/date/);
+  });
+
+  it("resolves tag slugs to their labels", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: [cloudflare-workers]\n---\nbody",
+    );
+
+    expect(getAllPosts()[0].tags).toEqual([
+      { slug: "cloudflare-workers", label: "Cloudflare Workers" },
+    ]);
+  });
+
+  it("throws when a tag is not registered", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: [unknown-tag]\n---\nbody",
+    );
+
+    expect(() => getAllPosts()).toThrow(/unknown-tag/);
+  });
+
+  it("throws when tags is not an array", () => {
+    mockFs.readdirSync.mockReturnValue(["hello-world.mdx"] as never);
+    mockFs.readFileSync.mockReturnValue(
+      "---\ntitle: Hello\ndate: 2024-01-01\ncategory: tech\ntags: cloudflare-workers\n---\nbody",
+    );
+
+    expect(() => getAllPosts()).toThrow(/tags/);
   });
 
   it("ignores non-.mdx files", () => {
@@ -158,6 +190,56 @@ describe("getAllPosts", () => {
         "1行目 2行目 3行目",
       );
     });
+  });
+});
+
+function mockPostsWithTags(postTags: Record<string, string[]>) {
+  mockFs.readdirSync.mockReturnValue(
+    Object.keys(postTags).map((slug) => `${slug}.mdx`) as never,
+  );
+  mockFs.readFileSync.mockImplementation((filepath) => {
+    const slug = path.basename(String(filepath), ".mdx");
+    const tags = postTags[slug];
+    const tagsLine = tags.length > 0 ? `tags: [${tags.join(", ")}]\n` : "";
+    return `---\ntitle: ${slug}\ndate: 2024-01-01\ncategory: tech\n${tagsLine}---\nbody`;
+  });
+}
+
+describe("getPostsByTag", () => {
+  it("returns only posts that have the given tag", () => {
+    mockPostsWithTags({
+      a: ["cloudflare-workers", "turnstile"],
+      b: ["react"],
+      c: ["turnstile"],
+    });
+
+    expect(getPostsByTag("turnstile").map((post) => post.slug)).toEqual([
+      "a",
+      "c",
+    ]);
+  });
+
+  it("returns an empty array when no post has the tag", () => {
+    mockPostsWithTags({ a: ["react"] });
+
+    expect(getPostsByTag("turnstile")).toEqual([]);
+  });
+});
+
+describe("getUsedTags", () => {
+  it("returns each used tag once and excludes unused registered tags", () => {
+    mockPostsWithTags({
+      a: ["react", "vite"],
+      b: ["vite"],
+    });
+
+    expect(getUsedTags().map((tag) => tag.slug)).toEqual(["react", "vite"]);
+  });
+
+  it("returns an empty array when no post has tags", () => {
+    mockPostsWithTags({ a: [] });
+
+    expect(getUsedTags()).toEqual([]);
   });
 });
 
