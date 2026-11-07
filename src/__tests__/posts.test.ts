@@ -6,6 +6,8 @@ import {
   getAllPosts,
   getPageBySlug,
   getPostBySlug,
+  getPostsByTag,
+  getUsedTags,
 } from "@/lib/posts";
 
 vi.mock("fs", () => ({
@@ -188,6 +190,56 @@ describe("getAllPosts", () => {
         "1行目 2行目 3行目",
       );
     });
+  });
+});
+
+function mockPostsWithTags(postTags: Record<string, string[]>) {
+  mockFs.readdirSync.mockReturnValue(
+    Object.keys(postTags).map((slug) => `${slug}.mdx`) as never,
+  );
+  mockFs.readFileSync.mockImplementation((filepath) => {
+    const slug = path.basename(String(filepath), ".mdx");
+    const tags = postTags[slug];
+    const tagsLine = tags.length > 0 ? `tags: [${tags.join(", ")}]\n` : "";
+    return `---\ntitle: ${slug}\ndate: 2024-01-01\ncategory: tech\n${tagsLine}---\nbody`;
+  });
+}
+
+describe("getPostsByTag", () => {
+  it("returns only posts that have the given tag", () => {
+    mockPostsWithTags({
+      a: ["cloudflare-workers", "turnstile"],
+      b: ["react"],
+      c: ["turnstile"],
+    });
+
+    expect(getPostsByTag("turnstile").map((post) => post.slug)).toEqual([
+      "a",
+      "c",
+    ]);
+  });
+
+  it("returns an empty array when no post has the tag", () => {
+    mockPostsWithTags({ a: ["react"] });
+
+    expect(getPostsByTag("turnstile")).toEqual([]);
+  });
+});
+
+describe("getUsedTags", () => {
+  it("returns each used tag once and excludes unused registered tags", () => {
+    mockPostsWithTags({
+      a: ["react", "vite"],
+      b: ["vite"],
+    });
+
+    expect(getUsedTags().map((tag) => tag.slug)).toEqual(["react", "vite"]);
+  });
+
+  it("returns an empty array when no post has tags", () => {
+    mockPostsWithTags({ a: [] });
+
+    expect(getUsedTags()).toEqual([]);
   });
 });
 
