@@ -5,7 +5,7 @@ import remarkDirective from "remark-directive";
 import { visit } from "unist-util-visit";
 import { toString } from "mdast-util-to-string";
 import type { Heading, Root } from "mdast";
-import { remarkHeadingId } from "./remark-heading-id";
+import { remarkHeadingId } from "./remark-heading-id.ts";
 
 export type TocHeading = {
   id: string;
